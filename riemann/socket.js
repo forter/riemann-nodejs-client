@@ -92,7 +92,7 @@ tcpSocket.prototype.send = function(payload) {
   payload.copy(packet, 4, 0);
   this.socket.write(packet, err => {
     if (err) {
-      this.emit('error', err);
+      this.socket.emit('error', err);
     }
   });
 };
