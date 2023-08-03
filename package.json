@@ -1,5 +1,5 @@
 {
-  "name": "riemann",
+  "name": "forter-riemann",
   "version": "0.4.4",
   "description": "node.js client for Riemann, supports hybrid UDP/TCP connections.",
   "author": {
