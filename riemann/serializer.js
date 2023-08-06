@@ -28,6 +28,7 @@ function _deserialize(type, value) {
   return messageType.decode(buffer);
 }
 
+// Forter: filter event invalid attributes
 /* protobuf has a very strict type system, so ensure that only the
    whitelisted attributes get passed through */
 var event_fields = [ 'time', 'state', 'service', 'host', 'description', 'tags', 'ttl', 'attributes', 'metric_f' ];
@@ -53,6 +54,7 @@ exports.deserializeEvent = function(event) {
 };
 
 exports.serializeMessage = function(message) {
+  // Forter: filter event invalid attributes
   message.events = (message.events || []).map(_cleanEvent);
   return _serialize('Msg', message);
 };

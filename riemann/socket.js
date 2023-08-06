@@ -102,6 +102,7 @@ tcpSocket.prototype.send = function(payload) {
   packet[2] = len >>> 8  & 0xFF;
   packet[3] = len & 0xFF;
   payload.copy(packet, 4, 0);
+  // Forter: add an error handler for reconnect
   this.socket.write(packet, err => {
     if (err) {
       this.socket.emit('error', err);
