@@ -1,14 +1,31 @@
-/* initialize our protobuf schema,
-   and cache it in memory. */
 var protobuf = require('protobufjs');
-var buf = protobuf.loadProtoFile(__dirname + '/proto/proto.proto').build();
+var path = require('path');
+
+/* initialize our protobuf schema, and cache it in memory. */
+var riemannSchema = protobuf.loadSync(path.join(__dirname, '/proto/proto.proto'));
 
 function _serialize(type, value) {
-  return new buf[type](value).encode().toBuffer();
+  var messageType = riemannSchema.lookupType(type);
+
+  // https://www.npmjs.com/package/protobufjs#valid-message
+  var errorString = messageType.verify(value);
+  var message;
+
+  // Using create is faster, so only fall back to fromObject in worst case.
+  if (errorString) {
+    message = messageType.fromObject(value);
+  } else {
+    message = messageType.create(value);
+  }
+
+  return messageType.encode(message).finish();
 }
 
 function _deserialize(type, value) {
-  return buf[type].decode(value);
+  var messageType = riemannSchema.lookupType(type);
+  var buffer = Buffer.from(value, 'binary');
+
+  return messageType.decode(buffer);
 }
 
 /* protobuf has a very strict type system, so ensure that only the
@@ -31,4 +48,20 @@ exports.serializeMessage = function(message) {
 
 exports.deserializeMessage = function(message) {
   return _deserialize('Msg', message);
+};
+
+exports.serializeQuery = function(query) {
+  return _serialize('Query', query);
+};
+
+exports.deserializeQuery = function(query) {
+  return _deserialize('Query', query);
+};
+
+exports.serializeState = function(state) {
+  return _serialize('State', state);
+};
+
+exports.deserializeState = function(state) {
+  return _deserialize('State', state);
 };
