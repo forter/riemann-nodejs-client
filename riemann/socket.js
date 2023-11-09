@@ -39,7 +39,7 @@ function tcpSocket(options) {
   // state machine for stream recv
   this._socketState     = 1;
   this._lenBufferOffset = 0;
-  this._lenBuffer       = Buffer.alloc(4);
+  this._lenBuffer       = Buffer.allocUnsafe(4);
   this._payloadBuffer   = null;
   this._payloadOffset   = 0;
 }
@@ -64,7 +64,7 @@ tcpSocket.prototype.onMessage = function(emit) {
           if (chunk.length+self._lenBufferOffset >= 4) {
             chunkOffset += 4-self._lenBufferOffset;
             chunk.copy(self._lenBuffer, self._lenBufferOffset, 0, chunkOffset);
-            self._payloadBuffer = Buffer.alloc(_getResponseLength(self._lenBuffer));
+            self._payloadBuffer = Buffer.allocUnsafe(_getResponseLength(self._lenBuffer));
             self._socketState = 2;
             self._lenBufferOffset = 0; // re-init
           } else {
@@ -96,7 +96,7 @@ tcpSocket.prototype.onMessage = function(emit) {
 tcpSocket.prototype.send = function(payload) {
   assert(Buffer.isBuffer(payload));
   var len = payload.length;
-  var packet = Buffer.alloc(len + 4);
+  var packet = Buffer.allocUnsafe(len + 4);
   packet[0] = len >>> 24 & 0xFF;
   packet[1] = len >>> 16 & 0xFF;
   packet[2] = len >>> 8  & 0xFF;
