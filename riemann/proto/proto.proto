@@ -42,6 +42,6 @@ message Msg {
 }
 
 message Attribute {
-  required string key = 1;
+  optional string key = 1;
   optional string value = 2;
 }

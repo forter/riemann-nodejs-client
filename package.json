@@ -20,13 +20,19 @@
     "url": "git://github.com/riemann/riemann-nodejs-client.git"
   },
   "dependencies": {
-    "event-to-promise": "^0.8.0",
-    "protobufjs": "7.2.4"
+    "event-to-promise": "0.8.0",
+    "protobufjs": "7.5.5"
   },
   "devDependencies": {
-    "jshint": "*",
-    "mocha": "*",
-    "mocha-junit-reporter": "^2.2.0"
+    "jshint": "2.13.6",
+    "mocha": "10.8.2",
+    "mocha-junit-reporter": "2.2.1"
+  },
+  "overrides": {
+    "js-yaml": "4.1.1",
+    "lodash": "4.18.1",
+    "minimatch": "3.1.5",
+    "serialize-javascript": "7.0.5"
   },
   "scripts": {
     "lint": "find . -name '*.js' -and -not -path './node_modules/*' | xargs jshint --verbose --config .jshintrc",
